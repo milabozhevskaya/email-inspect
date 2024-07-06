@@ -1,12 +1,14 @@
 main {
   text-align: center;
-  padding: 1em;
+  padding: 1rem;
   margin: 0 auto;
-  color: #333;
+  color: #474646;
 }
 
 h1 {
   color: var(--color-primary);
-  font-size: 4em;
-  font-weight: 100;
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: 20px;
+  text-shadow: -1px -1px 1px rgba(255,255,255,.1), 1px 1px 1px rgba(0,0,0,.5);
 }
