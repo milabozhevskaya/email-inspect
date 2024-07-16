@@ -28,11 +28,11 @@ const InspectTable: FC<InspectTableProps> = ({ emails, ...rest }) => {
       </thead>
       {Object.entries(groupedEmails).map(([datetime, emailGroup]) => (
         <tbody key={datetime}>
-          {emailGroup.map(({ id, from, to: recipients, subject, datetime }) => (
+          {emailGroup.map(({ id, from, to: receivers, subject, datetime }) => (
             <tr key={id}>
               <td>{from}</td>
               <td>
-                <ReceiversView recipients={recipients} />
+                <ReceiversView receivers={receivers} />
               </td>
               <td>{subject}</td>
               <td className="align-right">
