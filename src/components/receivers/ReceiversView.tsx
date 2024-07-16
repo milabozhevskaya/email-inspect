@@ -7,6 +7,7 @@ import {
 } from 'react'
 import { ReceiversWrap } from './'
 import { splitReceivers } from '../../helpers'
+import { useWindowSize } from '../../hooks'
 
 type ReceiversViewProps = PropsWithChildren<{ receivers: string[] }>
 
@@ -14,6 +15,8 @@ export const ReceiversView: FC<ReceiversViewProps> = ({ receivers }) => {
   if (receivers.length === 0) return 'No receivers'
 
   const [wrapsWidth, setWrapsWidth] = useState<Array<number> | null>(null)
+
+  const size = useWindowSize()
 
   const [combinations] = useState<Array<[string, boolean, number]>>(
     splitReceivers(receivers),
@@ -70,7 +73,7 @@ export const ReceiversView: FC<ReceiversViewProps> = ({ receivers }) => {
     }
     if (index === null) setCombinationIndex(0)
     else setCombinationIndex(index)
-  }, [])
+  }, [size])
 
   if (combinationIndex === null)
     return combinations.map(oneCombination => {
