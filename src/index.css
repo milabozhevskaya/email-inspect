@@ -5,6 +5,10 @@
   --border-style-tooltip: solid 2px #f94646c1;
   --background-even: #fed3d34c;
   --background-table-header: #5953532b;
+  --background-item-tooltip-hover: #f4b2b28e;
+  --background-copy-button-tooltip: #fc2e05d5;
+  --background-copy-button-tooltip-hover: #fd4f05d5;
+  --color-copy-button-tooltip: #f0f0f0;
 }
 
 html,
