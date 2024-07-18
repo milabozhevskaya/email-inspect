@@ -2,6 +2,7 @@
   --color-primary: #846c6cc9;
   --color-base: #474646;
   --border-style: solid 1px #d98181c1;
+  --border-style-tooltip: solid 2px #f94646c1;
   --background-even: #fed3d34c;
   --background-table-header: #5953532b;
 }
@@ -11,6 +12,7 @@ body {
   position: relative;
   width: 100%;
   color: var(--color-base);
+  box-sizing: border-box;
 }
 
 body {

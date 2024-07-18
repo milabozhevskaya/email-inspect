@@ -16,7 +16,7 @@ export const ReceiversView: FC<ReceiversViewProps> = ({ receivers }) => {
 
   const [isOpenTooltip, setIsOpenTooltip] = useState<boolean>(false)
 
-  const [coords, setCoords] = useState({ top: 0, left: 0 })
+  const [coords, setCoords] = useState({ top: 0, left: 0, height: 0 })
 
   const openTooltip = (bool: boolean) => {
     if (refWraps.current.length === 0) return
@@ -28,10 +28,12 @@ export const ReceiversView: FC<ReceiversViewProps> = ({ receivers }) => {
     if (!parentCell) return
 
     const parentCellRect = parentCell.getBoundingClientRect()
+    console.log(parentCellRect)
 
     setCoords({
       left: parentCellRect.x + parentCellRect.width,
       top: parentCellRect.y + window.scrollY,
+      height: document.documentElement.clientHeight - parentCellRect.y - 20,
     })
 
     setIsOpenTooltip(bool)
