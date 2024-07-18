@@ -3,11 +3,16 @@ import type { ComponentPropsWithoutRef, FC } from 'react'
 
 export type ReceiversBadgeProps = {
   numTruncated: number
+  openTooltip?: () => void
 } & Omit<ComponentPropsWithoutRef<'span'>, 'className' | 'style'>
 
-const ReceiversBadge: FC<ReceiversBadgeProps> = ({ numTruncated, ...rest }) => {
+const ReceiversBadge: FC<ReceiversBadgeProps> = ({
+  numTruncated,
+  openTooltip,
+  ...rest
+}) => {
   return (
-    <span {...rest} data-testid="badge">
+    <span {...rest} data-testid="badge" onMouseEnter={openTooltip}>
       +{numTruncated}
     </span>
   )

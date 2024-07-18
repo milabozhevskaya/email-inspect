@@ -5,7 +5,7 @@ import {
   useRef,
   useState,
 } from 'react'
-import { ReceiversWrap } from './'
+import { ReceiversTooltip, ReceiversWrap } from './'
 import { splitReceivers } from '../../helpers'
 import { useWindowSize } from '../../hooks'
 
@@ -13,6 +13,29 @@ type ReceiversViewProps = PropsWithChildren<{ receivers: string[] }>
 
 export const ReceiversView: FC<ReceiversViewProps> = ({ receivers }) => {
   if (receivers.length === 0) return 'No receivers'
+
+  const [isOpenTooltip, setIsOpenTooltip] = useState<boolean>(false)
+
+  const [coords, setCoords] = useState({ top: 0, left: 0 })
+
+  const openTooltip = (bool: boolean) => {
+    if (refWraps.current.length === 0) return
+
+    const parentCell =
+      (combinationIndex !== null && refWrap.current[0].parentElement) ||
+      refWraps.current[0].parentElement
+
+    if (!parentCell) return
+
+    const parentCellRect = parentCell.getBoundingClientRect()
+
+    setCoords({
+      left: parentCellRect.x + parentCellRect.width,
+      top: parentCellRect.y + window.scrollY,
+    })
+
+    setIsOpenTooltip(bool)
+  }
 
   const [wrapsWidth, setWrapsWidth] = useState<Array<number> | null>(null)
 
@@ -73,6 +96,8 @@ export const ReceiversView: FC<ReceiversViewProps> = ({ receivers }) => {
     }
     if (index === null) setCombinationIndex(0)
     else setCombinationIndex(index)
+
+    parentCell.onmouseleave = () => openTooltip(false)
   }, [size])
 
   if (combinationIndex === null)
@@ -91,12 +116,16 @@ export const ReceiversView: FC<ReceiversViewProps> = ({ receivers }) => {
     })
 
   return (
-    <ReceiversWrap
-      ref={refSingle}
-      width="100%"
-      text={combinations[combinationIndex][0]}
-      points={combinations[combinationIndex][1]}
-      badge={combinations[combinationIndex][2]}
-    />
+    <>
+      <ReceiversWrap
+        ref={refSingle}
+        width="100%"
+        text={combinations[combinationIndex][0]}
+        points={combinations[combinationIndex][1]}
+        badge={combinations[combinationIndex][2]}
+        openTooltip={() => openTooltip(true)}
+      />
+      {isOpenTooltip && <ReceiversTooltip list={receivers} coords={coords} />}
+    </>
   )
 }
