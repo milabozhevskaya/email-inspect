@@ -7,10 +7,11 @@ type ReceiversWrapProps = PropsWithChildren<{
   points: boolean
   badge: number
   width: string
+  openTooltip?: () => void
 }>
 
 export const ReceiversWrap = forwardRef(function (
-  { text, points, badge, width }: ReceiversWrapProps,
+  { text, points, badge, width, openTooltip }: ReceiversWrapProps,
   refFn: Ref<HTMLElement>,
 ) {
   const ref = (el: HTMLElement | null) => {
@@ -21,7 +22,9 @@ export const ReceiversWrap = forwardRef(function (
     <DivStyles ref={ref} width={width}>
       <TextStyles>{text}</TextStyles>
       {points && <PointStyles>...</PointStyles>}
-      {badge > 0 && <StyledReceiversBadge numTruncated={badge} />}
+      {badge > 0 && (
+        <StyledReceiversBadge numTruncated={badge} openTooltip={openTooltip} />
+      )}
     </DivStyles>
   )
 })
@@ -38,5 +41,6 @@ const PointStyles = styled.span`
 
 const DivStyles = styled.div<{ width: string }>`
   display: flex;
+  position: relative;
   width: ${props => props.width};
 `
