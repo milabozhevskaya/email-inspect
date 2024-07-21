@@ -28,7 +28,6 @@ export const ReceiversView: FC<ReceiversViewProps> = ({ receivers }) => {
     if (!parentCell) return
 
     const parentCellRect = parentCell.getBoundingClientRect()
-    console.log(parentCellRect)
 
     setCoords({
       left: parentCellRect.x + parentCellRect.width,
