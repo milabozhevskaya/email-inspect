@@ -1,4 +1,4 @@
-import type { FC, PropsWithChildren } from 'react'
+import { useState, type FC, type PropsWithChildren } from 'react'
 import { styled } from 'styled-components'
 
 type ReceiversTooltipProps = PropsWithChildren<{
@@ -10,8 +10,30 @@ export const ReceiversTooltip: FC<ReceiversTooltipProps> = ({
   list,
   coords,
 }) => {
+  const [message, setMessage] = useState('')
+
+  const copyToClipboard = async () => {
+    if (navigator.clipboard) {
+      try {
+        await navigator.clipboard.writeText(list.join('\n'))
+        setMessage('Скопировано в буфер обмена')
+      } catch (err) {
+        setMessage(`Ошибка при копировании текста: ${err}`)
+      } finally {
+        setTimeout(() => {
+          setMessage('')
+        }, 2000)
+      }
+    } else {
+      setMessage('Невозможно скопировать в буфер обмена')
+      setTimeout(() => {
+        setMessage('')
+      }, 2000)
+    }
+  }
+
   return (
-    <TooltipStyled top={`${coords.top}px`} left={`${coords.left}px`}>
+    <TooltipStyled {...{ top: `${coords.top}px`, left: `${coords.left}px` }}>
       <TooltipContainerStyled height={`${coords.height}px`}>
         <TooltipListStyled>
           {list.map(el => (
@@ -19,14 +41,21 @@ export const ReceiversTooltip: FC<ReceiversTooltipProps> = ({
           ))}
         </TooltipListStyled>
         <TooltipButtonsStyled>
-          <TooltipButtonStyled>Copy</TooltipButtonStyled>
+          <TooltipButtonStyled onClick={copyToClipboard}>
+            Copy
+          </TooltipButtonStyled>
+          <TooltipMessageContainerStyled>
+            <TooltipMessageStyled>{message}</TooltipMessageStyled>
+          </TooltipMessageContainerStyled>
         </TooltipButtonsStyled>
       </TooltipContainerStyled>
     </TooltipStyled>
   )
 }
 
-const TooltipStyled = styled.div<{ top: string; left: string }>`
+const TooltipStyled = styled(
+  ({ top, left, ...rest }: { top: string; left: string }) => <div {...rest} />,
+)`
   position: absolute;
   display: flex;
   padding: 6px 6px;
@@ -59,7 +88,9 @@ const TooltipListStyled = styled.ol`
 const TooltipButtonsStyled = styled.div`
   position: relative;
   display: flex;
+  align-items: center;
   padding: 0px 8px 10px;
+  flex-grow: 1;
 `
 const TooltipButtonStyled = styled.button`
   position: relative;
@@ -75,6 +106,10 @@ const TooltipButtonStyled = styled.button`
     transition: background-color 0.6s ease;
     background-color: var(--background-copy-button-tooltip-hover);
   }
+  &:active {
+    transition: background-color 0s ease;
+    background-color: var(--background-copy-button-tooltip-active);
+  }
 `
 const TooltipItemStyled = styled.li`
   transition: background-color 0.2s ease;
@@ -87,4 +122,31 @@ const TooltipItemStyled = styled.li`
     transition: background-color 0.2s ease;
     background-color: var(--background-item-tooltip-hover);
   }
+`
+const TooltipMessageContainerStyled = styled.div`
+  background-color: transparent;
+  padding-left: 5px;
+  margin: 0px;
+  display: flex;
+  flex-grow: 1;
+  align-items: center;
+  flex-wrap: no-wrap;
+  cursor: default;
+  overflow: hidden;
+  position: relative;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  height: 100%;
+`
+const TooltipMessageStyled = styled.span`
+  background-color: transparent;
+  display: flex;
+  margin: 0px;
+  cursor: default;
+  font-size: 14px;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  position: absolute;
 `
